@@ -1,0 +1,101 @@
+body {
+  margin:0;
+  font-family: Arial;
+  color:white;
+  background:#020617;
+}
+
+canvas {
+  position:fixed;
+  z-index:-1;
+}
+
+header {
+  display:flex;
+  justify-content:space-between;
+  padding:15px;
+}
+
+nav a {
+  color:cyan;
+  margin:10px;
+  text-decoration:none;
+}
+
+.hero {
+  text-align:center;
+  padding:60px;
+}
+
+input, button {
+  padding:10px;
+  margin:10px;
+}
+
+button {
+  background:cyan;
+  border:none;
+  box-shadow:0 0 10px cyan;
+}
+
+button:hover {
+  box-shadow:0 0 25px cyan;
+}
+
+.glass {
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(10px);
+  border-radius:10px;
+  padding:20px;
+}
+
+.dashboard {
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  padding:40px;
+}
+
+.card {
+  width:220px;
+  text-align:center;
+}
+
+.bar {
+  width:100%;
+  height:10px;
+  background:#333;
+}
+
+.fill {
+  height:10px;
+  background:cyan;
+  animation:grow 2s;
+}
+
+@keyframes grow {
+  from { width:0; }
+}
+
+/* Contact form center */
+form {
+  max-width:400px;
+  margin:auto;
+}
+
+/* About spacing */
+.content p {
+  margin-bottom:15px;
+  line-height:1.6;
+}
+
+@media(max-width:600px){
+  .dashboard{
+    flex-direction:column;
+    align-items:center;
+  }
+  header{
+    flex-direction:column;
+    text-align:center;
+  }
+}
