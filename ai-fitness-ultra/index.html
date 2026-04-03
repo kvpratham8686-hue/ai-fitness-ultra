@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Fitness Planner ULTRA</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<header>
+  <h1>⚡ AI Fitness ULTRA 🚀</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section class="hero glass">
+  <h2>Next-Level Fitness Intelligence</h2>
+  <p>Type OR speak your goal</p>
+
+  <input type="text" id="goal" placeholder="fat loss / muscle gain">
+  <button onclick="startVoice()">🎤 Speak</button>
+  <button onclick="generatePlan()">Generate Plan</button>
+</section>
+
+<section id="plan" class="plan-box glass"></section>
+
+<script>
+function generatePlan() {
+  const goal = document.getElementById("goal").value.toLowerCase();
+  let result = "";
+
+  if (goal.includes("muscle")) {
+    result = "🏋️ AI Plan: Heavy Strength + Progressive Overload";
+  } else if (goal.includes("fat")) {
+    result = "🔥 AI Plan: HIIT + Cardio + Calorie Deficit";
+  } else {
+    result = "⚡ AI Plan: Balanced Fitness Routine";
+  }
+
+  document.getElementById("plan").innerHTML = result;
+}
+
+function startVoice() {
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.onresult = function(event) {
+    document.getElementById("goal").value = event.results[0][0].transcript;
+  };
+  recognition.start();
+}
+
+// particles
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+for (let i = 0; i < 80; i++) {
+  particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height});
+}
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p => {
+    ctx.fillStyle = "cyan";
+    ctx.fillRect(p.x, p.y, 2, 2);
+    p.y += 0.5;
+    if (p.y > canvas.height) p.y = 0;
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>
