@@ -3,80 +3,240 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Fitness Planner ULTRA</title>
+<title>AI Fitness PRO</title>
+
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
 
-<canvas id="particles"></canvas>
+<!-- LOGIN -->
+<div id="loginBox" class="center glass fade">
+  <h1>⚡ AI Fitness PRO 🚀</h1>
+  <p>Welcome to next-level fitness</p>
+  <input id="username" placeholder="Enter your name">
+  <button onclick="login()">Enter</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none;">
 
 <header>
-  <h1>⚡ AI Fitness ULTRA 🚀</h1>
+  <h2>⚡ AI Fitness PRO</h2>
   <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="contact.html">Contact</a>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#contact">Contact</a>
   </nav>
+  <div>
+    <span id="welcome"></span>
+    <button onclick="logout()">Logout</button>
+    <button id="themeToggle">🌙</button>
+  </div>
 </header>
 
-<section class="hero glass">
+<!-- HOME -->
+<section id="home" class="glass hero fade">
   <h2>Next-Level Fitness Intelligence</h2>
-  <p>Type OR speak your goal</p>
 
-  <input type="text" id="goal" placeholder="fat loss / muscle gain">
-  <button onclick="startVoice()">🎤 Speak</button>
-  <button onclick="generatePlan()">Generate Plan</button>
+  <div class="input-group">
+    <input id="goal" placeholder="weight loss / muscle gain">
+    <button onclick="startVoice()">🎤 Speak</button>
+    <button onclick="generatePlan()">Generate Plan</button>
+  </div>
 </section>
 
-<section id="plan" class="plan-box glass"></section>
+<section id="plan" class="glass fade"></section>
+
+<!-- ABOUT -->
+<section id="about" class="glass fade">
+  <h2>About</h2>
+  <p>Advanced AI-style fitness planner with full weekly plans, diet charts, and tracking.</p>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="glass fade">
+  <h2>Dashboard</h2>
+
+  <h3>BMI</h3>
+  <input id="height" placeholder="Height cm">
+  <input id="weight" placeholder="Weight kg">
+  <button onclick="calcBMI()">Calculate</button>
+  <p id="bmiResult"></p>
+
+  <h3>Calories</h3>
+  <input id="age" placeholder="Age">
+  <input id="weightCal" placeholder="Weight">
+  <input id="heightCal" placeholder="Height">
+  <button onclick="calcCalories()">Calculate</button>
+  <p id="calResult"></p>
+
+  <h3>Steps Tracker</h3>
+  <input id="steps" placeholder="Steps">
+  <button onclick="track()">Save</button>
+
+  <canvas id="chart"></canvas>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="glass fade">
+  <h2>Contact</h2>
+  <input placeholder="Name">
+  <input placeholder="Email">
+  <textarea placeholder="Message"></textarea>
+  <button>Send</button>
+</section>
+
+</div>
 
 <script>
-function generatePlan() {
-  const goal = document.getElementById("goal").value.toLowerCase();
-  let result = "";
 
-  if (goal.includes("muscle")) {
-    result = "🏋️ AI Plan: Heavy Strength + Progressive Overload";
-  } else if (goal.includes("fat")) {
-    result = "🔥 AI Plan: HIIT + Cardio + Calorie Deficit";
-  } else {
-    result = "⚡ AI Plan: Balanced Fitness Routine";
+// LOGIN
+function login(){
+  let user=document.getElementById("username").value;
+  if(user){
+    localStorage.setItem("user",user);
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("app").style.display="block";
+    document.getElementById("welcome").innerText="Hi, "+user;
   }
-
-  document.getElementById("plan").innerHTML = result;
 }
 
+// AUTO LOGIN
+if(localStorage.getItem("user")){
+  document.getElementById("loginBox").style.display="none";
+  document.getElementById("app").style.display="block";
+  document.getElementById("welcome").innerText="Hi, "+localStorage.getItem("user");
+}
+
+// LOGOUT
+function logout(){
+  localStorage.clear();
+  location.reload();
+}
+
+// 🎤 VOICE INPUT
 function startVoice() {
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.onresult = function(event) {
-    document.getElementById("goal").value = event.results[0][0].transcript;
+  recognition.onresult = e => {
+    document.getElementById("goal").value = e.results[0][0].transcript;
   };
   recognition.start();
 }
 
-// particles
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+// 🔥 FULL PLAN GENERATOR
+function generatePlan(){
+  let goal=document.getElementById("goal").value.toLowerCase();
+  let result="";
 
-let particles = [];
-for (let i = 0; i < 80; i++) {
-  particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height});
+  if(goal.includes("loss") || goal.includes("fat")){
+    result = `
+    <h2>🔥 FAT LOSS COMPLETE PLAN</h2>
+
+    <h3>📅 Weekly Workout</h3>
+    <p>Mon: Cardio + Abs</p>
+    <p>Tue: HIIT + Legs</p>
+    <p>Wed: Cardio</p>
+    <p>Thu: HIIT + Core</p>
+    <p>Fri: Full Body</p>
+
+    <h3>🥗 Diet Plan</h3>
+    <p>Breakfast: Oats + fruits</p>
+    <p>Lunch: Roti + dal + veggies</p>
+    <p>Snack: Nuts + green tea</p>
+    <p>Dinner: Salad + protein</p>
+
+    <h3>💡 Rules</h3>
+    <p>✔ No sugar</p>
+    <p>✔ Drink 3L water</p>
+    <p>✔ Sleep 7 hours</p>
+    `;
+  }
+
+  else if(goal.includes("gain") || goal.includes("muscle")){
+    result = `
+    <h2>💪 MUSCLE GAIN COMPLETE PLAN</h2>
+
+    <h3>🏋️ Weekly Workout</h3>
+    <p>Mon: Chest</p>
+    <p>Tue: Back</p>
+    <p>Wed: Legs</p>
+    <p>Thu: Shoulders</p>
+    <p>Fri: Arms</p>
+
+    <h3>🍗 Diet Plan</h3>
+    <p>Breakfast: Oats + Milk + Banana</p>
+    <p>Lunch: Rice + Chicken / Paneer</p>
+    <p>Snack: Protein shake + nuts</p>
+    <p>Dinner: Roti + Eggs</p>
+
+    <h3>💡 Rules</h3>
+    <p>✔ Calorie surplus</p>
+    <p>✔ Lift heavy</p>
+    <p>✔ Sleep 8 hours</p>
+    `;
+  }
+
+  else {
+    result = `<h2>⚡ GENERAL FITNESS</h2><p>Stay active and eat balanced diet</p>`;
+  }
+
+  document.getElementById("plan").innerHTML=result;
 }
 
-function draw() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach(p => {
-    ctx.fillStyle = "cyan";
-    ctx.fillRect(p.x, p.y, 2, 2);
-    p.y += 0.5;
-    if (p.y > canvas.height) p.y = 0;
+// BMI
+function calcBMI(){
+  let h=document.getElementById("height").value/100;
+  let w=document.getElementById("weight").value;
+  let bmi=(w/(h*h)).toFixed(2);
+  document.getElementById("bmiResult").innerText="BMI: "+bmi;
+}
+
+// CALORIES
+function calcCalories(){
+  let age=document.getElementById("age").value;
+  let w=document.getElementById("weightCal").value;
+  let h=document.getElementById("heightCal").value;
+  let cal=10*w+6.25*h-5*age+5;
+  document.getElementById("calResult").innerText="Calories: "+Math.round(cal);
+}
+
+// GRAPH
+let data=JSON.parse(localStorage.getItem("stepsData"))||[];
+let chart;
+
+function track(){
+  let steps=document.getElementById("steps").value;
+  if(steps){
+    data.push(Number(steps));
+    localStorage.setItem("stepsData",JSON.stringify(data));
+    drawChart();
+  }
+}
+
+function drawChart(){
+  if(chart) chart.destroy();
+
+  chart=new Chart(document.getElementById("chart"),{
+    type:"line",
+    data:{
+      labels:data.map((_,i)=>"Day "+(i+1)),
+      datasets:[{
+        label:"Steps Progress",
+        data:data
+      }]
+    }
   });
-  requestAnimationFrame(draw);
 }
-draw();
+drawChart();
+
+// THEME
+document.getElementById("themeToggle").onclick=()=>{
+  document.body.classList.toggle("light");
+};
+
 </script>
 
 </body>
